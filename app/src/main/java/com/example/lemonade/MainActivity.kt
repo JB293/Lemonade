@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,23 +77,23 @@ fun LemonadeApp() {
 }
 @Composable
 fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
-    var currentStep by remember { mutableIntStateOf(1) }
-    var squeezeCount by remember { mutableIntStateOf(0) }
-    var drinkCount by remember { mutableIntStateOf(0) }
-    val imageResource = when (currentStep) {
+    var etapeActuelle by remember { mutableIntStateOf(1) }
+    var nombrePression by remember { mutableIntStateOf(0) }
+    var verre by remember { mutableIntStateOf(0) }
+    val imageResource = when (etapeActuelle) {
         1 -> R.drawable.lemon_tree
         2 -> R.drawable.lemon_squeeze
         3 -> R.drawable.lemon_drink
         else -> R.drawable.lemon_restart
     }
-    val textResource = when (currentStep) {
+    val textResource = when (etapeActuelle) {
         1 -> R.string.select_lemon
         2 -> R.string.squeeze_lemon
         3 -> R.string.drink_lemonade
         else -> R.string.restart_glass
     }
 
-    val descriptionResource = when (currentStep) {
+    val descriptionResource = when (etapeActuelle) {
         1 -> R.string.lemon_tree
         2 -> R.string.lemon
         3 -> R.string.glass_of_lemonade
@@ -109,25 +108,25 @@ fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
-                when (currentStep) {
+                when (etapeActuelle) {
                     1 -> {
-                        currentStep = 2
-                        squeezeCount = (2..4).random()
+                        etapeActuelle = 2
+                        nombrePression = (2..4).random()
                     }
                     2 -> {
-                        squeezeCount--
-                        if (squeezeCount == 0) {
-                            currentStep = 3
-                            drinkCount = (2..4).random()
+                        nombrePression--
+                        if (nombrePression == 0) {
+                            etapeActuelle = 3
+                            verre = (2..4).random()
                         }
                     }
                     3 -> {
-                        drinkCount--
-                        if (drinkCount == 0) {
-                            currentStep = 4
+                        verre--
+                        if (verre == 0) {
+                            nombrePression = 4
                         }
                     }
-                    else -> currentStep = 1
+                    else -> nombrePression = 1
                 }
             },
             shape = RoundedCornerShape(40.dp),
