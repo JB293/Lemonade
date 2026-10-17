@@ -79,7 +79,7 @@ fun LemonadeApp() {
 fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
     var etapeActuelle by remember { mutableIntStateOf(1) }
     var nombrePression by remember { mutableIntStateOf(0) }
-    var verre by remember { mutableIntStateOf(0) }
+
     val imageResource = when (etapeActuelle) {
         1 -> R.drawable.lemon_tree
         2 -> R.drawable.lemon_squeeze
@@ -117,16 +117,10 @@ fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
                         nombrePression--
                         if (nombrePression == 0) {
                             etapeActuelle = 3
-                            verre = (2..4).random()
                         }
                     }
-                    3 -> {
-                        verre--
-                        if (verre == 0) {
-                            nombrePression = 4
-                        }
-                    }
-                    else -> nombrePression = 1
+                    3 -> etapeActuelle = 4
+                    else -> etapeActuelle = 1
                 }
             },
             shape = RoundedCornerShape(40.dp),
