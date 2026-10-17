@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -29,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,20 +49,38 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun LemonadeApp() {
-    LemonadeWithButtonAndImage(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    )
+    Scaffold(
+        topBar = {
+            Text(
+                text = stringResource(R.string.app_name),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color(0xFFF9E44C))
+                    .statusBarsPadding()
+                    .padding(16.dp),
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+    ) { innerPadding ->
+        LemonadeWithButtonAndImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .wrapContentSize(Alignment.Center)
+        )
+    }
 }
 @Composable
 fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
     var currentStep by remember { mutableIntStateOf(1) }
     var squeezeCount by remember { mutableIntStateOf(0) }
-
+    var drinkCount by remember { mutableIntStateOf(0) }
     val imageResource = when (currentStep) {
         1 -> R.drawable.lemon_tree
         2 -> R.drawable.lemon_squeeze
@@ -81,18 +101,6 @@ fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
         else -> R.string.empty_glass
     }
 
-
-        Text(
-            text = stringResource(R.string.app_name),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(color = Color(0xFFF9E44C)),
-            fontSize = 24.sp,
-            textAlign = TextAlign.Center,
-            )
-
-
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -110,9 +118,15 @@ fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier) {
                         squeezeCount--
                         if (squeezeCount == 0) {
                             currentStep = 3
+                            drinkCount = (2..4).random()
                         }
                     }
-                    3 -> currentStep = 4
+                    3 -> {
+                        drinkCount--
+                        if (drinkCount == 0) {
+                            currentStep = 4
+                        }
+                    }
                     else -> currentStep = 1
                 }
             },
